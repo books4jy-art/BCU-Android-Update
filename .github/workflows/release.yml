@@ -1,0 +1,81 @@
+# Builds BCU KR, signs it with the app's own key and publishes it as a GitHub Release, so the APK can be
+# downloaded from the repository page (Releases > latest > BCU-KR-<version>.apk).
+#
+# Runs when started by hand (Actions > "Release APK" > Run workflow) or when a tag like v0.18.13-kr2 is pushed.
+# Needs two repository secrets (Settings > Secrets and variables > Actions):
+#   BCU_KR_KEYSTORE      the signing key file (bcu-kr-signing-key.jks), base64-encoded
+#   BCU_KR_KEY_PASSWORD  its password
+# Every release must be signed with the same key, or Android won't install it as an update.
+name: Release APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (empty: v + the app's versionName, e.g. v0.18.13-kr1)"
+        required: false
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      KEYSTORE: ${{ secrets.BCU_KR_KEYSTORE }}
+      KEY_PASSWORD: ${{ secrets.BCU_KR_KEY_PASSWORD }}
+    steps:
+      - name: Check the signing key is set
+        run: |
+          if [ -z "$KEYSTORE" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo "::error::Add the repository secrets BCU_KR_KEYSTORE and BCU_KR_KEY_PASSWORD first (see the top of this file)."
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Signing key
+        run: |
+          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/bcu-kr.jks"
+          printf 'storeFile=%s\nstorePassword=%s\nkeyAlias=bcukr\nkeyPassword=%s\n' \
+            "$RUNNER_TEMP/bcu-kr.jks" "$KEY_PASSWORD" "$KEY_PASSWORD" > keystore.properties
+      - name: Build
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          ./gradlew assembleRelease --console=plain
+      - name: Check the signature
+        run: |
+          apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk | tee signers.txt
+          grep -q "CN=BCU KR" signers.txt || { echo "::error::The APK isn't signed with the BCU KR key."; exit 1; }
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_INPUT: ${{ inputs.tag }}
+        run: |
+          ver=$(sed -n 's/^ *versionName "\([^"]*\)".*/\1/p' app/build.gradle)
+          tag="${TAG_INPUT:-${GITHUB_REF_NAME}}"
+          case "$tag" in v*) ;; *) tag="v$ver" ;; esac
+          apk="BCU-KR-$ver.apk"
+          cp app/build/outputs/apk/release/app-release.apk "$apk"
+          notes="BCU KR $ver: Battle Cats Ultimate for Android with BCU core 0.7.20.0 and the Korean game's data.
+
+          Download **$apk** below and open it on your phone (allow installing apps from this source when asked).
+          It installs next to the official BCU app. Updates install over it as long as they come from these releases.
+
+          Not made by me: Battle Cats Ultimate is by the BCU team; Battle Cats is © PONOS."
+          if gh release view "$tag" > /dev/null 2>&1; then
+            gh release upload "$tag" "$apk" --clobber
+          else
+            gh release create "$tag" "$apk" --title "BCU KR $ver" --notes "$notes" --target "$GITHUB_SHA" --latest
+          fi
+          echo "### Download: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$tag" >> "$GITHUB_STEP_SUMMARY"

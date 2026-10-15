@@ -5,6 +5,11 @@ Battle Cats Ultimate for Androids
 
 ## This copy: BCU KR
 
+### ⬇️ [Download the APK](https://github.com/books4jy-art/BCU-Android-Update/releases/latest)
+
+Open the latest release, download **BCU-KR-….apk** and open it on your Android phone (allow installing apps from
+that source when asked). It installs next to the official BCU app, and newer releases install over it.
+
 Not made by me: Battle Cats Ultimate and BCU Android are by the BCU team
 ([battlecatsultimate](https://github.com/battlecatsultimate)); Battle Cats is © PONOS.
 
@@ -44,6 +49,13 @@ git submodule update --init
 Signing: with a `keystore.properties` in the project folder (`storeFile`, `storePassword`, `keyAlias`,
 `keyPassword`) the APK is signed with that key; otherwise with the standard debug key. Keep the key private (this
 repository is public) and keep using the same one: Android only installs an update signed with the same key.
+
+## Publishing a release
+
+The "Release APK" workflow (`.github/workflows/release.yml`) builds the APK, signs it with the app's key and
+publishes it as a GitHub Release. Start it under Actions > "Release APK" > Run workflow (or push a tag such as
+`v0.18.13-kr2`). It needs the repository secrets `BCU_KR_KEYSTORE` (the key file, base64) and `BCU_KR_KEY_PASSWORD`.
+For a new version, raise `versionName` (and `versionCode`) in `app/build.gradle` first.
 
 ## Updating from BCU
 
