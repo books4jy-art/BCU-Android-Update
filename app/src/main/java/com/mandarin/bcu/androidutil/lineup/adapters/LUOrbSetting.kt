@@ -57,6 +57,12 @@ class LUOrbSetting : Fragment() {
     )
     private val grades = arrayOf("D", "C", "B", "A", "S")
 
+    /**
+     * The trait of special orbs: none. equipment_attribute.csv's last row (Orb.orbTrait's 12) is all zeros, so the
+     * core stores these orbs with trait 0; their picture is that row's icon, the ability orb.
+     */
+    private val SPECIAL_TRAIT = 0
+
     private val traitData = ArrayList<Int>()
     private val typeData = ArrayList<Int>()
 
@@ -274,6 +280,14 @@ class LUOrbSetting : Fragment() {
 
                 generateTraitData(od, slot, f, l, needTraitFiltering(data))
 
+                if(traitData.isNotEmpty() && !traitData.contains(data[1]))
+                    data[1] = traitData[0]
+
+                val validGrades = od[data[1]]
+
+                if(validGrades != null && validGrades.isNotEmpty() && !validGrades.contains(data[2]))
+                    data[2] = validGrades.last()
+
                 val t = ArrayList<String>()
 
                 val traitList = ArrayList<Trait>()
@@ -307,28 +321,20 @@ class LUOrbSetting : Fragment() {
                 if(needTraitFiltering(data)) {
                     for(tr in traitList) {
                         if(od.contains(1 shl tr.id.id)) {
-                            val r = getTextIndex(1 shl tr.id.id)
-
-                            if(r >= traits.size || r < 0) {
+                            t.add(traitLabel(1 shl tr.id.id) ?: run {
                                 Log.e("LUOrbSetting", "Invalid trait data in updateSpinners() : ${tr.id.id}")
                                 return
-                            } else {
-                                t.add(c.getString(traits[r]))
-                            }
+                            })
                         }
                     }
                 }
 
                 if(t.isEmpty()) {
                     for(i in od.keys) {
-                        val r = getTextIndex(i)
-
-                        if(r >= traits.size) {
+                        t.add(traitLabel(i) ?: run {
                             Log.e("LUOrbSetting", "Invalid trait data in updateSpinners() : $i")
                             return
-                        } else {
-                            t.add(c.getString(traits[r]))
-                        }
+                        })
                     }
                 }
 
@@ -355,7 +361,7 @@ class LUOrbSetting : Fragment() {
 
                 grade.adapter = a2
 
-                grade.setSelection(data[2], false)
+                grade.setSelection(g.indexOf(data[2]).coerceAtLeast(0), false)
 
                 orb[orbs.selectedItemPosition] = data
 
@@ -411,7 +417,10 @@ class LUOrbSetting : Fragment() {
 
                 grade.adapter = a2
 
-                grade.setSelection(data[2], false)
+                if(!g.contains(data[2]) && g.isNotEmpty())
+                    data[2] = g.last()
+
+                grade.setSelection(g.indexOf(data[2]).coerceAtLeast(0), false)
 
                 generateImage(orb[orbs.selectedItemPosition], image)
 
@@ -437,7 +446,12 @@ class LUOrbSetting : Fragment() {
                 if(data.isEmpty())
                     return
 
-                data[2] = position
+                val g = CommonStatic.getBCAssets().ORB[data[Data.ORB_TYPE]]?.get(data[Data.ORB_TRAIT]) ?: return
+
+                if(position !in g.indices)
+                    return
+
+                data[2] = g[position]
 
                 orb[orbs.selectedItemPosition] = data
 
@@ -700,6 +714,14 @@ class LUOrbSetting : Fragment() {
             typeData.add(Data.ORB_RESISTANT)
         }
 
+        // special orbs (no trait; BCU KR adds them: the 2024 app only knew the five above)
+        for(id in CommonStatic.getBCAssets().ORB.keys.sorted()) {
+            if(id >= Data.ORB_DEATH_SURGE) {
+                types.add(getType(id))
+                typeData.add(id)
+            }
+        }
+
         val a0 = ArrayAdapter(c, R.layout.spinnersmall, types.toTypedArray())
 
         type.adapter = a0
@@ -738,28 +760,20 @@ class LUOrbSetting : Fragment() {
         if(needTraitFiltering(data)) {
             for(tr in traitList) {
                 if(od.contains(1 shl tr.id.id)) {
-                    val r = getTextIndex(1 shl tr.id.id)
-
-                    if(r >= traits.size) {
+                    t.add(traitLabel(1 shl tr.id.id) ?: run {
                         Log.e("LUOrbSetting", "Invalid trait data in updateSpinners() : ${tr.id.id}")
                         return
-                    } else {
-                        t.add(c.getString(traits[r]))
-                    }
+                    })
                 }
             }
         }
 
         if(t.isEmpty()) {
             for(i in od.keys) {
-                val r = getTextIndex(i)
-
-                if(r >= traits.size || r < 0) {
+                t.add(traitLabel(i) ?: run {
                     Log.e("LUOrbSetting", "Invalid trait data in updateSpinners() : $i")
                     return
-                } else {
-                    t.add(c.getString(traits[r]))
-                }
+                })
             }
         }
 
@@ -788,7 +802,7 @@ class LUOrbSetting : Fragment() {
 
         grade.adapter = a2
 
-        grade.setSelection(data[2], false)
+        grade.setSelection(g.indexOf(data[2]).coerceAtLeast(0), false)
     }
 
     private fun generateOrbTexts() : List<String> {
@@ -904,12 +918,17 @@ class LUOrbSetting : Fragment() {
                 c.getString(R.string.orb_res)
             }
             else -> {
-                return "Unknown Type $type"
+                val names = c.resources.getStringArray(R.array.orb_special_names)
+
+                if(type in names.indices) names[type] else "Unknown Type $type"
             }
         }
     }
 
     private fun getTrait(trait: Int) : String {
+        if(trait == SPECIAL_TRAIT)
+            return getString(R.string.orb_no_trait)
+
         val r = StringBuilder()
 
         for(i in Interpret.TRAIT.indices) {
@@ -972,7 +991,11 @@ class LUOrbSetting : Fragment() {
 
         val p = Paint()
 
-        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().TRAITS[0][getTextIndex(data[Data.ORB_TRAIT])].bimg() as Bitmap, c, 96f), 0f, 0f, p)
+        val traitIcons = CommonStatic.getBCAssets().TRAITS[0]
+        val traitIcon = if(data[Data.ORB_TRAIT] == SPECIAL_TRAIT) Orb.orbTrait.size - 1 else getTextIndex(data[Data.ORB_TRAIT])
+
+        if(traitIcon in traitIcons.indices)
+            cv.drawBitmap(StaticStore.getResizeb(traitIcons[traitIcon].bimg() as Bitmap, c, 96f), 0f, 0f, p)
 
         p.alpha = (255 * 0.75).toInt()
 
@@ -1091,8 +1114,10 @@ class LUOrbSetting : Fragment() {
             Data.ORB_MASSIVE -> c.getString(R.string.orb_mas_desc)
                 .replace("_", Data.ORB_MASSIVE_MULTI[data[Data.ORB_GRADE]].toString())
 
-            else -> c.getString(R.string.orb_res_desc)
+            Data.ORB_RESISTANT -> c.getString(R.string.orb_res_desc)
                 .replace("_", Data.ORB_RESISTANT_MULTI[data[Data.ORB_GRADE]].toString())
+
+            else -> specialDescription(data[Data.ORB_TYPE], data[Data.ORB_GRADE])
         }
 
         text.visibility = View.VISIBLE
@@ -1201,5 +1226,54 @@ class LUOrbSetting : Fragment() {
                 return i
         
         return -1
+    }
+
+    /** Name of an orb's trait (bit mask); special orbs have none. null: unknown. */
+    private fun traitLabel(mask: Int) : String? {
+        val c = context ?: return null
+
+        if(mask == SPECIAL_TRAIT)
+            return c.getString(R.string.orb_no_trait)
+
+        val r = getTextIndex(mask)
+
+        return if(r in traits.indices) c.getString(traits[r]) else null
+    }
+
+    /** Description of a special orb at a grade, with its values (as the core applies them in EUnit / ELineUp). */
+    private fun specialDescription(type: Int, grade: Int) : String {
+        val c = context ?: return ""
+
+        val texts = c.resources.getStringArray(R.array.orb_special_desc)
+
+        if(type !in texts.indices || grade !in 0..4)
+            return ""
+
+        val values: IntArray? = when(type) {
+            Data.ORB_DEATH_SURGE -> Data.ORB_DEATH_SURGE_MULT
+            Data.ORB_MONEY_BACK -> Data.ORB_MONEY_BACK_MULT
+            Data.ORB_SOL_BUFF, Data.ORB_UL_BUFF -> Data.ORB_LEGEND_ATTACK
+            Data.ORB_BARON_KILLER -> Data.ORB_BARON_DAMAGE
+            Data.ORB_CANNON_RECHARGE -> Data.ORB_CANNON_RECHARGE_MULT
+            Data.ORB_IMUATK -> Data.ORB_IMUATK_MULT
+            Data.ORB_SINGLE_COUNTER_SURGE -> Data.ORB_SINGLE_COUNTER_SURGE_MULT
+            Data.ORB_BERSERKER -> Data.ORB_BERSERKER_MULT
+            Data.ORB_COOLDOWN -> Data.ORB_COOLDOWN_MULT
+            Data.ORB_COST_DOWN -> Data.ORB_COST_DOWN_MULT
+            Data.ORB_BOUNTY -> Data.ORB_SINGLE_BOUNTY_MULT
+            Data.ORB_WAVE_RESIST, Data.ORB_KB_RESIST, Data.ORB_TOXIC_RESIST, Data.ORB_SLOW_RESIST, Data.ORB_CURSE_RESIST,
+            Data.ORB_STOP_RESIST, Data.ORB_WEAK_RESIST, Data.ORB_VOLC_RESIST, Data.ORB_BLAST_RESIST -> Data.ORB_RESIST_MULT
+            else -> null
+        }
+
+        var text = texts[type]
+
+        if(values != null && grade in values.indices)
+            text = text.replace("{0}", values[grade].toString() + "%")
+
+        if(type == Data.ORB_BARON_KILLER && grade in Data.ORB_BARON_DEFENSE.indices)
+            text = text.replace("{1}", Data.ORB_BARON_DEFENSE[grade].toString() + "%")
+
+        return text
     }
 }

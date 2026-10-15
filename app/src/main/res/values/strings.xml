@@ -1033,4 +1033,62 @@
         <item>BCU (Japan 15.5)</item>
     </string-array>
     <string name="config_country_restart">The game data is reloaded when the app restarts. Restart now?</string>
+    <!-- BCU KR: special orbs, by orb type (Data.ORB_*); {0} = the grade's value (LUOrbSetting) -->
+    <string name="orb_no_trait">No trait</string>
+    <string-array name="orb_special_names">
+        <item>Attack Up</item>
+        <item>Damage Down</item>
+        <item>Strong Up</item>
+        <item>Massive Damage Up</item>
+        <item>Resistant Up</item>
+        <item>Death Mini-Surge</item>
+        <item>Resist Waves</item>
+        <item>Refund</item>
+        <item>Resist Knockback</item>
+        <item>Legend Story Boost</item>
+        <item>Colossus Slayer</item>
+        <item>Cat Cannon Charge</item>
+        <item>Resist Toxic</item>
+        <item>Dodge All Attacks</item>
+        <item>Resist Slow</item>
+        <item>Resist Curse</item>
+        <item>Uncanny Legends Boost</item>
+        <item>Single Counter Surge</item>
+        <item>Attack Up on Kills</item>
+        <item>Recharge Down</item>
+        <item>Resist Freeze</item>
+        <item>Resist Weaken</item>
+        <item>Cost Down</item>
+        <item>Resist Surge</item>
+        <item>Money Up on First Kill</item>
+        <item>Resist Explosions</item>
+    </string-array>
+    <string-array name="orb_special_desc">
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item>Every 2nd one deployed: makes a mini surge when it dies ({0} damage)</item>
+        <item>Damage from waves -{0}</item>
+        <item>Every 2nd one deployed: gives back {0} of its cost when it dies</item>
+        <item>Knockback from enemies -{0}</item>
+        <item>In Legend Stages: health and attack +{0}</item>
+        <item>Every 2nd one deployed: Colossus Slayer (damage dealt {0}, damage taken {1})</item>
+        <item>Every 2nd one deployed: charges the Cat Cannon by {0} when it dies</item>
+        <item>Damage from toxic -{0}</item>
+        <item>Every 2nd one deployed: {0} chance to dodge all attacks for a while</item>
+        <item>Slow from enemies -{0}</item>
+        <item>Curse from enemies -{0}</item>
+        <item>In Uncanny Legends: health and attack +{0}</item>
+        <item>Every 2nd one deployed: returns a surge once when hit by one ({0} damage)</item>
+        <item>Attack +{0} after defeating 10 enemies</item>
+        <item>Every 2nd one deployed: recharge time -{0}</item>
+        <item>Freeze from enemies -{0}</item>
+        <item>Weaken from enemies -{0}</item>
+        <item>Every 2nd one deployed: cost -{0}</item>
+        <item>Damage from surges -{0}</item>
+        <item>Every 2nd one deployed: money from its first kill +{0}</item>
+        <item>Damage from explosions -{0}</item>
+    </string-array>
 </resources>
