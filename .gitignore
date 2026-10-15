@@ -14,3 +14,6 @@ keystore.jks
 keystore.properties
 *.jks
 *.keystore
+
+# (the list of Korean files must be in git, despite *.json above)
+!app/src/main/assets/kr/files.json
