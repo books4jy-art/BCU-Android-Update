@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mandarin.bcu.R
 import com.mandarin.bcu.androidutil.battle.sound.SoundHandler
 import com.mandarin.bcu.androidutil.fakeandroid.BMBuilder
@@ -12,6 +11,7 @@ import com.mandarin.bcu.androidutil.io.AContext
 import com.mandarin.bcu.androidutil.io.AssetException
 import com.mandarin.bcu.androidutil.io.DefineItf
 import com.mandarin.bcu.androidutil.io.ErrorLogWriter
+import com.mandarin.bcu.androidutil.io.KoreanData
 import com.mandarin.bcu.androidutil.io.LangLoader
 import com.mandarin.bcu.androidutil.io.LanguageException
 import com.mandarin.bcu.androidutil.pack.PackConflict
@@ -46,7 +46,10 @@ object Definer {
                 try {
                     AssetLoader.load(prog)
 
-                    FirebaseCrashlytics.getInstance().log("Read asset loader properly\n${VFile.getBCFileTree().list()}")
+                    // the Korean game's versions of files that differ from BCU's (see KoreanData)
+                    com.mandarin.bcu.androidutil.CrashLog.log("Korean files: ${KoreanData.apply(context)}")
+
+                    com.mandarin.bcu.androidutil.CrashLog.log("Read asset loader properly\n${VFile.getBCFileTree().list()}")
 
                     UserProfile.getBCData().load({ t -> text.accept(StaticStore.getLoadingText(context, t)) }, prog)
                 } catch (e: Exception) {
