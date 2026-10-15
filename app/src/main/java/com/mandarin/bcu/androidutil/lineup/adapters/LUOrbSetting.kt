@@ -21,6 +21,8 @@ import com.mandarin.bcu.androidutil.Interpret
 import com.mandarin.bcu.androidutil.StaticStore
 import com.mandarin.bcu.androidutil.io.ErrorLogWriter
 import com.mandarin.bcu.androidutil.lineup.LineUpView
+import com.mandarin.bcu.androidutil.lineup.isBC
+import com.mandarin.bcu.androidutil.lineup.orbs
 import com.mandarin.bcu.androidutil.supports.SingleClick
 import common.CommonStatic
 import common.battle.BasisSet
@@ -284,7 +286,7 @@ class LUOrbSetting : Fragment() {
                     }
 
                     for(tr in mu.traits) {
-                        if(tr.BCTrait)
+                        if(tr.isBC())
                             traitList.add(tr)
                     }
                 } else {
@@ -296,7 +298,7 @@ class LUOrbSetting : Fragment() {
                         }
 
                         for(tr in mu.traits) {
-                            if(tr.BCTrait && !traitList.contains(tr))
+                            if(tr.isBC() && !traitList.contains(tr))
                                 traitList.add(tr)
                         }
                     }
@@ -522,9 +524,9 @@ class LUOrbSetting : Fragment() {
             return
         }
 
-        if(l.orbs == null && f.orbs != null) {
-            if(f.orbs.slots != -1) {
-                l.orbs = Array(f.orbs.slots) { intArrayOf()}
+        if(l.orbs == null && o != null) {
+            if(o.slots != -1) {
+                l.orbs = Array(o.slots) { intArrayOf()}
             } else {
                 l.orbs = Array(0) { intArrayOf()}
             }
@@ -551,14 +553,14 @@ class LUOrbSetting : Fragment() {
 
                 (vi as TextView).text = generateOrbTextAt(position)
 
-                if(CommonStatic.getConfig().realLevel && f.orbs != null && f.orbs.slots != -1 && f.orbs.limits[position] == 1 && l.lv + l.plusLv < 60)
+                if(CommonStatic.getConfig().realLevel && o != null && o.slots != -1 && o.limits[position] == 1 && l.lv + l.plusLv < 60)
                     vi.setTextColor(vi.textColors.withAlpha(64))
 
                 return vi
             }
 
             override fun isEnabled(position: Int): Boolean {
-                return f.orbs == null || f.orbs.slots == -1 || !CommonStatic.getConfig().realLevel || f.orbs.limits[position] != 1 || l.lv + l.plusLv >= 60
+                return o == null || o.slots == -1 || !CommonStatic.getConfig().realLevel || o.limits[position] != 1 || l.lv + l.plusLv >= 60
             }
         }
 
@@ -569,7 +571,7 @@ class LUOrbSetting : Fragment() {
         } else {
             val types = ArrayList<String>()
 
-            if(f.orbs.slots != -1) {
+            if(o.slots != -1) {
                 types.add(c.getString(R.string.unit_info_t_none))
                 types.add(c.getString(R.string.orb_atk))
                 types.add(c.getString(R.string.orb_def))
@@ -646,7 +648,7 @@ class LUOrbSetting : Fragment() {
             res = (abi and Data.AB_RESIST) != 0
 
             for(t in mu.traits) {
-                if(t.BCTrait)
+                if(t.isBC())
                     traitList.add(t)
             }
         } else {
@@ -664,7 +666,7 @@ class LUOrbSetting : Fragment() {
                 res = res or ((abi and Data.AB_RESIST) != 0)
 
                 for(t in mu.traits) {
-                    if(t.BCTrait && !traitList.contains(t))
+                    if(t.isBC() && !traitList.contains(t))
                         traitList.add(t)
                 }
             }
@@ -970,15 +972,15 @@ class LUOrbSetting : Fragment() {
 
         val p = Paint()
 
-        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().TRAITS[getTextIndex(data[Data.ORB_TRAIT])].bimg() as Bitmap, c, 96f), 0f, 0f, p)
+        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().TRAITS[0][getTextIndex(data[Data.ORB_TRAIT])].bimg() as Bitmap, c, 96f), 0f, 0f, p)
 
         p.alpha = (255 * 0.75).toInt()
 
-        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().TYPES[data[Data.ORB_TYPE]].bimg() as Bitmap, c, 96f), 0f, 0f, p)
+        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().TYPES[0][data[Data.ORB_TYPE]].bimg() as Bitmap, c, 96f), 0f, 0f, p)
 
         p.alpha = 255
 
-        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().GRADES[data[Data.ORB_GRADE]].bimg() as Bitmap, c, 96f), 0f, 0f, p)
+        cv.drawBitmap(StaticStore.getResizeb(CommonStatic.getBCAssets().GRADES[0][data[Data.ORB_GRADE]].bimg() as Bitmap, c, 96f), 0f, 0f, p)
 
         v.setImageBitmap(b)
     }
@@ -994,7 +996,7 @@ class LUOrbSetting : Fragment() {
             }
 
             for(t in mu.traits) {
-                if(t.BCTrait)
+                if(t.isBC())
                     traitList.add(t)
             }
         } else {
@@ -1006,7 +1008,7 @@ class LUOrbSetting : Fragment() {
                 }
 
                 for(t in mu.traits) {
-                    if(t.BCTrait && !traitList.contains(t))
+                    if(t.isBC() && !traitList.contains(t))
                         traitList.add(t)
                 }
             }
@@ -1124,7 +1126,7 @@ class LUOrbSetting : Fragment() {
                 res = res or ((mu.abi and Data.AB_RESIST) != 0)
 
                 for(t in mu.traits) {
-                    if(!t.BCTrait)
+                    if(!t.isBC())
                         continue
 
                     val bitMask = 1 shl t.id.id
@@ -1145,7 +1147,7 @@ class LUOrbSetting : Fragment() {
             res = (mu.abi and Data.AB_RESIST) != 0
 
             for(t in mu.traits) {
-                if(!t.BCTrait)
+                if(!t.isBC())
                     continue
 
                 val bitMask = 1 shl t.id.id

@@ -201,7 +201,7 @@ class BattleSimulation : AppCompatActivity() {
                 }
 
                 if(CommonStatic.getConfig().realLevel)
-                    lu.performRealisticLeveling()
+                    lu.performRealisticLeveling(stg.lim?.stageLimit)
 
                 val ctrl = SBCtrl(AndroidKeys(), stg, star, lu, intArrayOf(item), r.nextLong())
 

@@ -507,10 +507,13 @@ class GetStrings(private val c: Context) {
         else
             f.du
 
+        // (the core now takes the lineup's research combo as a number)
+        val res = t.getFinRes(du.respawn, BasisSet.current().sele.getInc(Data.C_RESP.toInt()))
+
         return if (frse == 0)
-            t.getFinRes(du.respawn, false).toString() + "f"
+            res.toString() + "f"
         else
-            DecimalFormat("#.##").format(t.getFinRes(du.respawn, false).toDouble() / 30) + "s"
+            DecimalFormat("#.##").format(res.toDouble() / 30) + "s"
     }
 
     fun getAtk(f: Form?, t: Treasure?, talent: Boolean, lvs: Level): String {
@@ -743,7 +746,8 @@ class GetStrings(private val c: Context) {
         if (em == null)
             return ""
 
-        return (em.de.drop * t.getDropMulti(false) / 100).toInt().toString()
+        // (the accounting combo is now applied by the caller, as in BCU's PC version)
+        return (em.de.drop * t.getDropMulti() * (1 + BasisSet.current().sele.getInc(Data.C_MEAR.toInt()) * 0.01f) / 100).toInt().toString()
     }
 
     private fun getAtks(f: Form?, t: Treasure?, talent: Boolean, lvs: Level): String {

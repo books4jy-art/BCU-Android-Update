@@ -450,7 +450,7 @@ public interface BattleBox {
                         g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 0, 255, 0, 100);
 
                     if (bf.sb.summonerSummoned[i][j]) {
-                        if (bf.sb.spiritSummoned[i][j] || (bf.sb.summoner[i][j] != null && bf.sb.summoner[i][j].anim.dead >= 0)) {
+                        if (bf.sb.spiritSummoned[i][j] || bf.sb.findEntitiesOf(i, j).stream().anyMatch(e -> e.anim.dead >= 0)) {
                             g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 64, 0, 0, 160);
                         } else {
                             if (bf.sb.spiritEmphasizeCount[i][j] % 2 == 0) {
@@ -551,7 +551,7 @@ public interface BattleBox {
                     g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 0, 255, 0, 100);
 
                 if (bf.sb.summonerSummoned[index][i % 5]) {
-                    if (bf.sb.spiritSummoned[index][i % 5] || (bf.sb.summoner[index][i % 5] != null && bf.sb.summoner[index][i % 5].anim.dead >= 0)) {
+                    if (bf.sb.spiritSummoned[index][i % 5] || bf.sb.findEntitiesOf(index, i % 5).stream().anyMatch(e -> e.anim.dead >= 0)) {
                         g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 64, 0, 0, 160);
                     } else {
                         if (bf.sb.spiritEmphasizeCount[index][i % 5] % 2 == 0) {
@@ -753,12 +753,12 @@ public interface BattleBox {
                     continue;
 
                 if ((bf.sb.s_stop == 0 || (bf.sb.le.get(i).getAbi() & Data.AB_TIMEI) == 0)) {
-                    int dep = bf.sb.le.get(i).layer * DEP;
+                    int dep = bf.sb.le.get(i).currentLayer * DEP;
 
                     while (!efList.isEmpty()) {
                         ContAb wc = efList.get(0);
 
-                        if (wc.layer + 1 <= bf.sb.le.get(i).layer) {
+                        if (wc.layer + 1 <= bf.sb.le.get(i).currentLayer) {
                             drawEff(gra, wc, at, psiz);
 
                             efList.remove(0);
@@ -927,7 +927,7 @@ public interface BattleBox {
                         continue;
                     
                     if ((bf.sb.le.get(i).getAbi() & Data.AB_TIMEI) > 0) {
-                        int dep = bf.sb.le.get(i).layer * DEP;
+                        int dep = bf.sb.le.get(i).currentLayer * DEP;
 
                         if (((CVGraphics) gra).neg) {
                             gra.setComposite(CVGraphics.POSITIVE, 0, 0);
