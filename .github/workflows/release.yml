@@ -52,13 +52,15 @@ jobs:
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           ./gradlew assembleRelease --console=plain
-      - name: Check the signature and the Korean data
+      - name: Check the signature and the country data
         run: |
           apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
           "$apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk | tee signers.txt
           grep -q "CN=BCU KR" signers.txt || { echo "::error::The APK isn't signed with the BCU KR key."; exit 1; }
-          unzip -l app/build/outputs/apk/release/app-release.apk | grep -q "assets/kr/files.json" \
-            || { echo "::error::The Korean data list (assets/kr/files.json) is missing from the APK."; exit 1; }
+          for c in kr jp en tw; do
+            unzip -l app/build/outputs/apk/release/app-release.apk | grep -q "assets/$c/files.json" \
+              || { echo "::error::The country data list assets/$c/files.json is missing from the APK."; exit 1; }
+          done
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -69,7 +71,7 @@ jobs:
           case "$tag" in v*) ;; *) tag="v$ver" ;; esac
           apk="BCU-KR-$ver.apk"
           cp app/build/outputs/apk/release/app-release.apk "$apk"
-          notes="BCU KR $ver: Battle Cats Ultimate for Android with BCU core 0.7.20.0 and the Korean game's data.
+          notes="BCU KR $ver: Battle Cats Ultimate for Android with BCU core 0.7.20.0 and the game's country versions (Settings > Game version: Korea, Japan, English or Taiwan 15.6, or BCU's own data).
 
           Download **$apk** below and open it on your phone (allow installing apps from this source when asked).
           It installs next to the official BCU app. Updates install over it as long as they come from these releases.

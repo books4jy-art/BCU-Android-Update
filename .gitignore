@@ -15,5 +15,9 @@ keystore.properties
 *.jks
 *.keystore
 
-# (the list of Korean files must be in git, despite *.json above)
-!app/src/main/assets/kr/files.json
+# (the country data lists must be in git, despite *.json above)
+!app/src/main/assets/*/files.json
+
+# downloads of tools/country_data.py
+tools/.cache/
+__pycache__/

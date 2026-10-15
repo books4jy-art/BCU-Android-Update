@@ -26,8 +26,8 @@ android {
         applicationId "com.mandarin.bcu.kr"
         minSdkVersion 24
         targetSdkVersion 34
-        versionCode 1
-        versionName "0.18.13-kr1" // BCU Android 0.18.13 + this copy's changes (core 0.7.20.0, Korean data)
+        versionCode 2
+        versionName "0.18.13-kr2" // BCU Android 0.18.13 + this copy's changes (core 0.7.20.0, country data)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         android.buildFeatures.buildConfig = true

@@ -1,6 +1,7 @@
 {
 "./org/data/SkillAcquisition.csv": 49988,
 "./org/data/equipmentslot.csv": 1279,
+"./org/data/unitbuy.csv": 170941,
 "./org/img/bg/bg081.png": 203088,
 "./org/img/bg/bg123.png": 222905,
 "./org/img/bg/bg146.png": 182550,
@@ -82,8 +83,6 @@
 "./org/stage/C/MSDC/MapStageDataC_101.csv": 778,
 "./org/stage/C/MSDC/MapStageDataC_178.csv": 182,
 "./org/stage/C/StageRC/stageRC090_00.csv": 1028,
-"./org/stage/C/StageRC/stageRC101_00.csv": 903,
-"./org/stage/C/StageRC/stageRC101_01.csv": 907,
 "./org/stage/CA/MSDCA/MapStageDataCA_006.csv": 1616,
 "./org/stage/CA/MSDCA/MapStageDataCA_009.csv": 318,
 "./org/stage/CH/stage/stage04.csv": 441,
@@ -126,7 +125,6 @@
 "./org/stage/E/StageEX/stageEX073_03.csv": 705,
 "./org/stage/E/StageEX/stageEX079_03.csv": 705,
 "./org/stage/R/StageR/stageRR010_00.csv": 2293,
-"./org/stage/R/StageRR/stageRR033_00.csv": 1729,
 "./org/stage/RA/MSDRA/MapStageDataA_068.csv": 432,
 "./org/stage/RA/MSDRA/MapStageDataA_069.csv": 343,
 "./org/stage/RA/MSDRA/MapStageDataA_074.csv": 401,
@@ -149,7 +147,6 @@
 "./org/stage/RA/StageRA/stageRA078_08.csv": 609,
 "./org/stage/RA/StageRA/stageRA078_09.csv": 609,
 "./org/stage/RA/StageRA/stageRA078_10.csv": 699,
-"./org/stage/RA/StageRA/stageRA078_11.csv": 701,
 "./org/stage/RA/StageRA/stageRA078_12.csv": 714,
 "./org/stage/RA/StageRA/stageRA078_13.csv": 713,
 "./org/stage/RA/StageRA/stageRA078_14.csv": 713,
@@ -163,7 +160,6 @@
 "./org/stage/S/MSDS/MapStageDataS_321.csv": 834,
 "./org/stage/S/MSDS/MapStageDataS_359.csv": 134,
 "./org/stage/S/MSDS/MapStageDataS_412.csv": 415,
-"./org/stage/S/StageRS/stageRS224_00.csv": 588,
 "./org/stage/S/StageRS/stageRS261_00.csv": 633,
 "./org/stage/S/StageRS/stageRS261_04.csv": 671,
 "./org/stage/S/StageRS/stageRS267_00.csv": 679,
@@ -174,10 +170,10 @@
 "./org/stage/S/StageRS/stageRS267_05.csv": 741,
 "./org/stage/S/StageRS/stageRS267_06.csv": 880,
 "./org/stage/S/StageRS/stageRS267_07.csv": 601,
-"./org/stage/S/StageRS/stageRS288_00.csv": 745,
 "./org/stage/S/StageRS/stageRS367_00.csv": 670,
 "./org/stage/S/StageRS/stageRS367_01.csv": 705,
 "./org/stage/S/StageRS/stageRS367_02.csv": 807,
 "./org/stage/S/StageRS/stageRS367_03.csv": 758,
-"./org/stage/S/StageRS/stageRS419_05.csv": 411
+"./org/stage/S/StageRS/stageRS419_05.csv": 411,
+"./org/unit/369/unit369.csv": 763
 }

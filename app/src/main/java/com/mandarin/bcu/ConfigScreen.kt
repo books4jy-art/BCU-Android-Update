@@ -45,6 +45,7 @@ import com.mandarin.bcu.androidutil.Revalidater
 import com.mandarin.bcu.androidutil.StaticStore
 import com.mandarin.bcu.androidutil.battle.sound.SoundHandler
 import com.mandarin.bcu.androidutil.io.AContext
+import com.mandarin.bcu.androidutil.io.CountryData
 import com.mandarin.bcu.androidutil.io.DefineItf
 import com.mandarin.bcu.androidutil.supports.ColorPickerView
 import com.mandarin.bcu.androidutil.supports.LeakCanaryManager
@@ -293,6 +294,36 @@ open class ConfigScreen : AppCompatActivity() {
 
         language.post {
             started = true
+        }
+
+        // which country's game data to use (CountryData); takes effect when the app restarts
+        val country = findViewById<Spinner>(R.id.configcountrysp)
+
+        country.adapter = ArrayAdapter(this, R.layout.spinneradapter, resources.getStringArray(R.array.config_country_names))
+        country.setSelection(CountryData.CODES.indexOf(CountryData.chosen(this)).coerceAtLeast(0), false)
+
+        country.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (!started || CountryData.CODES[position] == CountryData.chosen(this@ConfigScreen))
+                    return
+
+                shared.edit().putString(CountryData.PREF, CountryData.CODES[position]).apply()
+
+                AlertDialog.Builder(this@ConfigScreen)
+                    .setMessage(R.string.config_country_restart)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        val launch = packageManager.getLaunchIntentForPackage(packageName) ?: return@setPositiveButton
+
+                        launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(launch)
+                        finishAffinity()
+                        Runtime.getRuntime().exit(0)
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         val unitinfland = findViewById<RadioGroup>(R.id.configinfland)

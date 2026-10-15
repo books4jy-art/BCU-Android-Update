@@ -11,7 +11,7 @@ import com.mandarin.bcu.androidutil.io.AContext
 import com.mandarin.bcu.androidutil.io.AssetException
 import com.mandarin.bcu.androidutil.io.DefineItf
 import com.mandarin.bcu.androidutil.io.ErrorLogWriter
-import com.mandarin.bcu.androidutil.io.KoreanData
+import com.mandarin.bcu.androidutil.io.CountryData
 import com.mandarin.bcu.androidutil.io.LangLoader
 import com.mandarin.bcu.androidutil.io.LanguageException
 import com.mandarin.bcu.androidutil.pack.PackConflict
@@ -46,8 +46,8 @@ object Definer {
                 try {
                     AssetLoader.load(prog)
 
-                    // the Korean game's versions of files that differ from BCU's (see KoreanData)
-                    com.mandarin.bcu.androidutil.CrashLog.log("Korean files: ${KoreanData.apply(context)}")
+                    // the chosen country's versions of files that differ from BCU's (see CountryData)
+                    com.mandarin.bcu.androidutil.CrashLog.log("Game version ${CountryData.chosen(context)}: ${CountryData.apply(context)} files")
 
                     com.mandarin.bcu.androidutil.CrashLog.log("Read asset loader properly\n${VFile.getBCFileTree().list()}")
 

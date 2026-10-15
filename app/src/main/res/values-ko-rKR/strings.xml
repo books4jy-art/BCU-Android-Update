@@ -1024,4 +1024,14 @@
     <string name="eff_guar">가드 (더미)</string>
     <string name="eff_meki">메탈 킬러</string>
     <string name="eff_mekie">메탈 킬러 적 측면</string>
+    <!-- BCU KR: which country's game data to use (androidutil/io/CountryData.kt) -->
+    <string name="config_country">게임 버전</string>
+    <string-array name="config_country_names">
+        <item>한국판 15.6</item>
+        <item>일본판 15.6</item>
+        <item>영어판 15.6</item>
+        <item>대만판 15.6</item>
+        <item>BCU 기본 (일본판 15.5)</item>
+    </string-array>
+    <string name="config_country_restart">앱을 다시 시작하면 게임 데이터를 다시 불러와요. 지금 다시 시작할까요?</string>
 </resources>

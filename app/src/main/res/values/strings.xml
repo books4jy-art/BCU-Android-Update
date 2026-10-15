@@ -1023,4 +1023,14 @@
     <string name="eff_guar">Guard (Dummy)</string>
     <string name="eff_meki">Metal Killer</string>
     <string name="eff_mekie">Metal Killer Enemy Side</string>
+    <!-- BCU KR: which country's game data to use (androidutil/io/CountryData.kt) -->
+    <string name="config_country">Game version</string>
+    <string-array name="config_country_names">
+        <item>Korea 15.6</item>
+        <item>Japan 15.6</item>
+        <item>English 15.6</item>
+        <item>Taiwan 15.6</item>
+        <item>BCU (Japan 15.5)</item>
+    </string-array>
+    <string name="config_country_restart">The game data is reloaded when the app restarts. Restart now?</string>
 </resources>
