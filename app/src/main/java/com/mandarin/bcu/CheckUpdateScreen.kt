@@ -646,6 +646,11 @@ open class CheckUpdateScreen : AppCompatActivity() {
         }
 
     private fun checkApk(apks: Array<UpdateCheck.UpdateJson.ApkJson>) : UpdateCheck.UpdateJson.ApkJson? {
+        // this copy (com.mandarin.bcu.kr) is updated from its own repository; the official APKs listed here are
+        // a different app, so never offer them as an update
+        if (BuildConfig.APPLICATION_ID != "com.mandarin.bcu")
+            return null
+
         val shared = getSharedPreferences(StaticStore.CONFIG, Context.MODE_PRIVATE)
 
         val ver = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

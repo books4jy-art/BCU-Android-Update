@@ -115,7 +115,7 @@ class AssetListAdapter(private val ac: Activity, private val files: ArrayList<VF
                             ins.close()
                             fos.close()
 
-                            val uri = FileProvider.getUriForFile(context,"com.mandarin.bcu.provider",g)
+                            val uri = FileProvider.getUriForFile(context,com.mandarin.bcu.BuildConfig.APPLICATION_ID + ".provider",g)
 
                             val intent = Intent()
 

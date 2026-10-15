@@ -494,9 +494,11 @@ class MainActivity : AppCompatActivity() {
                 try {
                     if (safeCheck(f)) {
                         withContext(Dispatchers.IO) {
-                            val inputStream = resources.openRawResource(R.raw.service_key)
-                            val good = try {
-                                DriveUtil.upload(f, inputStream)
+                            // the BCU team's upload key (res/raw/service_key) isn't public, so this copy can only
+                            // send error logs when one is added
+                            val keyId = resources.getIdentifier("service_key", "raw", packageName)
+                            val good = keyId != 0 && try {
+                                DriveUtil.upload(f, resources.openRawResource(keyId))
                             } catch (_: Exception) {
                                 false
                             }

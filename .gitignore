@@ -9,3 +9,8 @@ keystore.jks
 /app/release/*
 /build/*
 /.idea/
+
+# this copy's signing key (never commit it: the repository is public)
+keystore.properties
+*.jks
+*.keystore

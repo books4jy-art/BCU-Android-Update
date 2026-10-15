@@ -1,6 +1,5 @@
 package com.mandarin.bcu.androidutil;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import common.pack.Identifier;
 import common.pack.UserProfile;
@@ -64,7 +63,7 @@ public class StaticJava {
                 }
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().log("Try to generate EAnimD, but failed : \n\ndata = " + data + "\nform = " + form + "\ndataId = " + dataId);
+            com.mandarin.bcu.androidutil.CrashLog.log("Try to generate EAnimD, but failed : \n\ndata = " + data + "\nform = " + form + "\ndataId = " + dataId);
         }
 
         return UserProfile.getBCData().units.get(0).forms[0].getEAnim(AnimU.UType.WALK);

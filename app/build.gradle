@@ -2,31 +2,37 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.firebase.crashlytics'
-    id 'com.google.gms.google-services'
 }
 
 android {
+    // This copy's own signing key (keystore.properties + the keystore file, kept out of git); without it the
+    // build is signed with the standard debug key.
+    def ks = rootProject.file('keystore.properties')
     signingConfigs {
-        release {
-            storeFile file('/Users/roguerouge/Downloads/BCU_Android/keystore.jks')
-            storePassword 'battlecatsultimate'
-            keyAlias 'key0'
-            keyPassword 'battlecatsultimate'
+        if (ks.exists()) {
+            release {
+                def p = new Properties()
+                ks.withInputStream { p.load(it) }
+                storeFile rootProject.file(p.getProperty('storeFile'))
+                storePassword p.getProperty('storePassword')
+                keyAlias p.getProperty('keyAlias')
+                keyPassword p.getProperty('keyPassword')
+            }
         }
     }
     compileSdkVersion 34
     defaultConfig {
-        applicationId "com.mandarin.bcu"
+        // own ID, so this copy installs next to the official BCU app (com.mandarin.bcu)
+        applicationId "com.mandarin.bcu.kr"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1
-        versionName "0.18.13"
+        versionName "0.18.13-kr1" // BCU Android 0.18.13 + this copy's changes (core 0.7.20.0, Korean data)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         android.buildFeatures.buildConfig = true
         buildConfigField "String", "YOU_CANT_FIND_PASSWORD", "\"" + getPassword() + "\""
-        signingConfig signingConfigs.release
+        signingConfig ks.exists() ? signingConfigs.release : signingConfigs.debug
     }
     buildTypes {
         debug {
@@ -91,10 +97,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
 
-    implementation platform('com.google.firebase:firebase-bom:32.8.0')
-
-    implementation 'com.google.firebase:firebase-crashlytics:18.6.3'
-    implementation 'com.google.firebase:firebase-analytics:21.6.1'
 
     implementation "androidx.media3:media3-exoplayer:1.3.0"
     implementation "androidx.media3:media3-exoplayer-dash:1.3.0"
@@ -106,7 +108,10 @@ repositories {
 }
 
 def getPassword() {
+    // (the BCU developers' setting; this copy builds without it)
+    def f = project.rootProject.file('local.properties')
+    if (!f.exists()) return ""
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty("password")
+    properties.load(f.newDataInputStream())
+    return properties.getProperty("password", "")
 }

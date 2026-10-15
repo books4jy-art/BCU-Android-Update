@@ -115,7 +115,7 @@ class PackManagementAdapter(private val ac: Activity, private val pList: ArrayLi
                     }
 
 
-                    val uri = FileProvider.getUriForFile(context,"com.mandarin.bcu.provider",f)
+                    val uri = FileProvider.getUriForFile(context,com.mandarin.bcu.BuildConfig.APPLICATION_ID + ".provider",f)
 
                     val intent = Intent()
 

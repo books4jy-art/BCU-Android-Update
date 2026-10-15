@@ -157,7 +157,7 @@ class ApkDownload : AppCompatActivity() {
 
             StaticStore.setAppear(retry)
         } else {
-            val apkuri = FileProvider.getUriForFile(this@ApkDownload, "com.mandarin.bcu.provider", output)
+            val apkuri = FileProvider.getUriForFile(this@ApkDownload, com.mandarin.bcu.BuildConfig.APPLICATION_ID + ".provider", output)
 
             val intent = Intent(Intent.ACTION_VIEW).setDataAndType(apkuri, "application/vnd.android.package-archive")
 

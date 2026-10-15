@@ -17,7 +17,6 @@ import android.widget.TextView
 import androidx.media3.common.Player
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mandarin.bcu.BattleSimulation
 import com.mandarin.bcu.R
 import com.mandarin.bcu.androidutil.StaticStore
@@ -140,7 +139,7 @@ class BattleView(context: Context, field: BattleField?, type: Int, axis: Boolean
                         logMessage += "\nAnimation : ${f.anim}\n\nImgcut : ${f.anim.imgcut}\nMamodel : ${f.anim.mamodel}\nAnim : ${f.anim.anims}"
                     }
 
-                    FirebaseCrashlytics.getInstance().log(logMessage)
+                    com.mandarin.bcu.androidutil.CrashLog.log(logMessage)
 
                     throw err
                 }
@@ -161,7 +160,7 @@ class BattleView(context: Context, field: BattleField?, type: Int, axis: Boolean
                     logMessage += "\nAnimation : ${e.anim}\n\nImgcut : ${e.anim.imgcut}\nMamodel : ${e.anim.mamodel}\nAnim : ${e.anim.anims}"
                 }
 
-                FirebaseCrashlytics.getInstance().log(logMessage)
+                com.mandarin.bcu.androidutil.CrashLog.log(logMessage)
 
                 throw err
             }

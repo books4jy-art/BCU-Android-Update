@@ -14,7 +14,6 @@ import android.widget.Spinner
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mandarin.bcu.R
 import com.mandarin.bcu.UnitInfo
 import com.mandarin.bcu.androidutil.GetStrings
@@ -448,7 +447,7 @@ class LUUnitSetting : Fragment() {
 
                     for(i in talentIndex.indices) {
                         if (talentIndex[i] >= max.size) {
-                            FirebaseCrashlytics.getInstance().log("Max : ${max.contentToString()} | Talent Index : $talentIndex | Super Talent Index : $superTalentIndex\nUnit : $f - ${f.uid}")
+                            com.mandarin.bcu.androidutil.CrashLog.log("Max : ${max.contentToString()} | Talent Index : $talentIndex | Super Talent Index : $superTalentIndex\nUnit : $f - ${f.uid}")
                         }
 
                         val list = ArrayList<Int>()

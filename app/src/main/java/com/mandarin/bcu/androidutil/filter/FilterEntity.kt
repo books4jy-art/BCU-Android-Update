@@ -1,6 +1,5 @@
 package com.mandarin.bcu.androidutil.filter
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mandarin.bcu.androidutil.Interpret
 import com.mandarin.bcu.androidutil.StatFilterElement
 import com.mandarin.bcu.androidutil.StaticStore
@@ -262,7 +261,7 @@ object FilterEntity {
 
         val lang = Locale.getDefault().language
 
-        FirebaseCrashlytics.getInstance().log("B0 : ${b0.size} | B1 : ${b1.size} | B2 : ${b2.size} | B3 : ${b3.size} | B4 : ${b4.size} | ENEMY : ${p.enemies.size()}")
+        com.mandarin.bcu.androidutil.CrashLog.log("B0 : ${b0.size} | B1 : ${b1.size} | B2 : ${b2.size} | B3 : ${b3.size} | B4 : ${b4.size} | ENEMY : ${p.enemies.size()}")
 
         for (i in p.enemies.list.indices)
             if (b0[i] && b1[i] && b2[i] && b3[i] && b4[i]) {
