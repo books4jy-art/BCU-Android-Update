@@ -144,23 +144,6 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
-        <receiver
-            android:name=".MusicPlayer$MusicReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.HEADSET_PLUG" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".CheckUpdateScreen$ServiceBroadCastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.mandarin.bcu::Progress-Text" />
-                <action android:name="com.mandarin.bcu::Progress-Progression" />
-                <action android:name="com.mandarin.bcu::Success" />
-                <action android:name="com.mandarin.bcu::Failed" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
