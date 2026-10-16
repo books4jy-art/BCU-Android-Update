@@ -159,7 +159,9 @@ object Definer {
                 val iconpath = "./org/page/icons/"
 
                 StaticStore.icons = Array(number.size) {i ->
-                    if(number[i] == 227) {
+                    if(number[i] < 0) {
+                        (CommonStatic.getBCAssets().icon[0].getOrNull(-number[i] - 1)?.img?.bimg() ?: StaticStore.empty(1, 1)) as Bitmap
+                    } else if(number[i] == 227) {
                         if(files[i].isNotEmpty()) {
                             VFile.get(iconpath+files[i]).data.img.bimg() as Bitmap
                         } else {
@@ -178,7 +180,9 @@ object Definer {
                 val iconpath = "./org/page/icons/"
 
                 StaticStore.picons = Array(number.size) {i ->
-                    if(number[i] == 227) {
+                    if(number[i] < 0) {
+                        (CommonStatic.getBCAssets().icon[1].getOrNull(-number[i] - 1)?.img?.bimg() ?: StaticStore.empty(1, 1)) as Bitmap
+                    } else if(number[i] == 227) {
                         if(files[i].isNotEmpty()) {
                             VFile.get(iconpath+files[i]).data.img.bimg() as Bitmap
                         } else {

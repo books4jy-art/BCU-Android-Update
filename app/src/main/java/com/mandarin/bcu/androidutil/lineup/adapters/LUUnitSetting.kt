@@ -236,8 +236,8 @@ class LUUnitSetting : Fragment() {
                 talent = arrayOf()
                 superTalent = arrayOf()
 
-                for(i in level.talents.indices)
-                    level.talents[i] = 0
+                // BCU KR: the talents are kept (as BCU PC does): they belong to the cat and are used again when it
+                // is changed back to a form that has them; a form without talents doesn't use them in battle
 
                 setDisappear(t, tal, supernprow)
             }

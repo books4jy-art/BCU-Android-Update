@@ -162,17 +162,17 @@ object StaticStore {
     /** Star used for difficulty **/
     var starDifficulty: Array<Bitmap>? = null
 
-    /** Imgcut index list of ablities  */
-    var anumber = intArrayOf(203, 204, 206, 202, 209, 218, 227, 227, 227, 260, 258, 227, 227, 110, 227, 122, 114, 297, 300, 315, 319)
+    /** Imgcut index list of ablities; a negative number -(ABI_x + 1) takes the core's icon for ability ABI_x */
+    var anumber = intArrayOf(203, 204, 206, 202, 209, 218, 227, 227, 227, 260, 258, 227, 227, 110, 227, 122, 114, 297, 300, 315, 319, -(Data.ABI_VKILL + 1))
 
-    /** Imgcut index list of procs  */
-    var pnumber = intArrayOf(195, 197, 198, 207, 266, 289, 231, 196, 199, 200, 201, 321, 264, 296, 229, 205, 293, 208, 310, 239, 317, 302, 213, 214, 215, 216, 210, 243, 262, 116, 237, 329, 330, 331, 332, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 43, 45, 47, 49, 51, 53, 109, 235, 241)
+    /** Imgcut index list of procs; a negative number -(P_x + 1) takes the core's icon for proc P_x (BCU KR: procs added in core 0.7.x) */
+    var pnumber = intArrayOf(195, 197, 198, 207, 266, 289, 231, 196, 199, 200, 201, 321, 264, 296, 229, 205, 293, 208, 310, 239, 317, 302, 213, 214, 215, 216, 210, 243, 262, 116, 237, 329, 330, 331, 332, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, 227, -(Data.P_SPEEDUP + 1), -(Data.P_HPREGEN + 1), -(Data.P_BLAST + 1), -(Data.P_IMUBLAST + 1), -(Data.P_LETHARGY + 1), -(Data.P_IMULETH + 1), -(Data.P_DELAY + 1), -(Data.P_IMUDELAY + 1), 43, 45, 47, 49, 51, 53, 109, 235, 241)
 
     /** File index list of abilities  */
-    var afiles = arrayOf("", "", "", "", "", "", "SnipeX.png", "TimeX.png", "Ghost.png", "", "", "Suicide.png", "ThemeX.png", "", "BossWaveX.png", "", "", "", "", "", "")
+    var afiles = arrayOf("", "", "", "", "", "", "SnipeX.png", "TimeX.png", "Ghost.png", "", "", "Suicide.png", "ThemeX.png", "", "BossWaveX.png", "", "", "", "", "", "", "")
 
     /** File index list of procs  */
-    var pfiles = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Burrow.png", "Revive.png", "Snipe.png", "Seal.png", "Time.png", "Summon.png", "Moving.png", "Theme.png", "Poison.png", "BossWave.png", "ArmorBreak.png", "Speed.png", "Counter.png", "DmgCut.png", "DmgCap.png", "CritX.png", "PoisonX.png", "SealX.png", "MovingX.png", "SummonX.png", "ArmorBreakX.png", "SpeedX.png", "CannonX.png", "", "", "", "", "", "", "", "", "")
+    var pfiles = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "Burrow.png", "Revive.png", "Snipe.png", "Seal.png", "Time.png", "Summon.png", "Moving.png", "Theme.png", "Poison.png", "BossWave.png", "ArmorBreak.png", "Speed.png", "Counter.png", "DmgCut.png", "DmgCap.png", "CritX.png", "PoisonX.png", "SealX.png", "MovingX.png", "SummonX.png", "ArmorBreakX.png", "SpeedX.png", "CannonX.png", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
     //Variables for Unit
 
@@ -189,10 +189,10 @@ object StaticStore {
     //Variables for Map/Stage
 
     var SisOpen = false
-    var bcMapNames = intArrayOf(R.string.stage_sol, R.string.stage_event, R.string.stage_collabo, R.string.stage_eoc, R.string.stage_ex, R.string.stage_dojo, R.string.stage_heavenly, R.string.stage_ranking, R.string.stage_challenge, R.string.stage_uncanny, R.string.stage_night, R.string.stage_baron, R.string.stage_enigma, R.string.stage_CA, R.string.stage_Q, R.string.stage_L, R.string.stage_ND)
-    var mapcode: ArrayList<String> = ArrayList(listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034"))
+    var bcMapNames = intArrayOf(R.string.stage_sol, R.string.stage_event, R.string.stage_collabo, R.string.stage_eoc, R.string.stage_ex, R.string.stage_dojo, R.string.stage_heavenly, R.string.stage_ranking, R.string.stage_challenge, R.string.stage_uncanny, R.string.stage_night, R.string.stage_baron, R.string.stage_enigma, R.string.stage_CA, R.string.stage_Q, R.string.stage_L, R.string.stage_ND, R.string.stage_SR, R.string.stage_G)
+    var mapcode: ArrayList<String> = ArrayList(listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034", "000036", "000037"))
     var BCmaps = mapcode.size
-    val BCMapCode = listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034")
+    val BCMapCode = listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034", "000036", "000037")
     var eicons: Array<Bitmap>? = null
     var maplistClick = SystemClock.elapsedRealtime()
     var stglistClick = SystemClock.elapsedRealtime()
@@ -347,7 +347,7 @@ object StaticStore {
     fun resetUserPacks() {
         UserProfile.unloadAllUserPacks()
 
-        mapcode = ArrayList(listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034"))
+        mapcode = ArrayList(listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034", "000036", "000037"))
         PackConflict.conflicts.clear()
 
         packRead = false

@@ -24,6 +24,10 @@
         "BUFF": "buff",
         "DEBUFF": "debuff"
     },
+    "LethEff": {
+        "BUFF": "buff",
+        "DEBUFF": "debuff"
+    },
     "SpeedEff": {
         "UP": "increase",
         "DOWN": "decrease"
@@ -78,5 +82,10 @@
     "GuardEff": {
         "NONE": "default",
         "BREAK": "break"
+    },
+    "BlastEff": {
+        "START": "Start",
+        "EXPLODE": "Explode",
+        "DUMMY": "Dummy"
     }
 }

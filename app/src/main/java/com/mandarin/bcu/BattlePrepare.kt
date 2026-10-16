@@ -271,7 +271,17 @@ class BattlePrepare : AppCompatActivity() {
 
                         intent.putExtra("Data", JsonEncoder.encode(data).toString())
                         intent.putExtra("star", star.selectedItemPosition)
-                        intent.putExtra("item", item)
+                        // BCU KR: as BCU PC, no Rich Cat or Sniper the Cat on stages that don't allow them
+                        val lim = stage.getLim(star.selectedItemPosition)
+                        var items = item
+
+                        if (lim != null && lim.rich != 0)
+                            items = items and 1.inv()
+
+                        if (lim != null && lim.sniper != 0)
+                            items = items and 2.inv()
+
+                        intent.putExtra("item", items)
 
                         startActivity(intent)
                         BattlePrepare.rich = false

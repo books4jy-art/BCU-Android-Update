@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.mandarin.bcu.R
 import com.mandarin.bcu.androidutil.StaticStore
 import com.mandarin.bcu.androidutil.io.ErrorLogWriter
+import common.CommonStatic
 import common.battle.BasisSet
 import common.util.unit.Combo
 import java.text.DecimalFormat
@@ -27,7 +28,7 @@ class ComboListAdapter internal constructor(activity: Activity, private val name
 
     }
 
-    private val comnames = intArrayOf(R.string.combo_atk, R.string.combo_hp, R.string.combo_spd, R.string.combo_caninch, R.string.combo_work, R.string.combo_initmon, R.string.combo_canatk, R.string.combo_canchtime, R.string.combo_efficiency, R.string.combo_wal, R.string.combo_bsh, R.string.combo_cd, R.string.combo_ac, R.string.combo_xp, R.string.combo_strag, R.string.combo_md, R.string.combo_res, R.string.combo_kbdis, R.string.combo_sl, R.string.combo_st, R.string.combo_wea, R.string.combo_inc, R.string.combo_wit, R.string.combo_eva, R.string.combo_crit)
+    private val comnames = intArrayOf(R.string.combo_atk, R.string.combo_hp, R.string.combo_spd, R.string.combo_caninch, R.string.combo_work, R.string.combo_initmon, R.string.combo_canatk, R.string.combo_canchtime, R.string.combo_efficiency, R.string.combo_wal, R.string.combo_bsh, R.string.combo_cd, R.string.combo_ac, R.string.combo_xp, R.string.combo_strag, R.string.combo_md, R.string.combo_res, R.string.combo_kbdis, R.string.combo_sl, R.string.combo_st, R.string.combo_wea, R.string.combo_inc, R.string.combo_wit, R.string.combo_eva, R.string.combo_crit, R.string.combo_vkill, R.string.combo_imuwave, R.string.combo_discount, R.string.combo_imuvolc)
 
     override fun getView(position: Int, view: View?, group: ViewGroup): View {
         val holder: ViewHolder
@@ -94,7 +95,11 @@ class ComboListAdapter internal constructor(activity: Activity, private val name
             21 -> multi = " ( +" + (20 + 10 * c.lv) + "% )"
             22, 23 -> multi = " ( +" + (100 + 100 * c.lv) + "% )"
             24 -> multi = " ( +" + (1 + c.lv) + "% )"
+            27 -> multi = " ( -" + CommonStatic.getBCAssets().values[c.type][c.lv] + "% )"
         }
+
+        if (c.type !in comnames.indices)
+            return "Lv. " + (c.lv + 1)
 
         return context.getString(comnames[c.type]) + " Lv. " + (c.lv + 1) + multi
     }

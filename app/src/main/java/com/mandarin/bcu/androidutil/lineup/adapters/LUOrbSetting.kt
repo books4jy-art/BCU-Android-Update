@@ -1274,6 +1274,10 @@ class LUOrbSetting : Fragment() {
         if(type == Data.ORB_BARON_KILLER && grade in Data.ORB_BARON_DEFENSE.indices)
             text = text.replace("{1}", Data.ORB_BARON_DEFENSE[grade].toString() + "%")
 
+        // the core (0.7.20.0) doesn't apply this orb in battle yet
+        if(type == Data.ORB_TOXIC_RESIST)
+            text += " " + c.getString(R.string.orb_not_applied)
+
         return text
     }
 }

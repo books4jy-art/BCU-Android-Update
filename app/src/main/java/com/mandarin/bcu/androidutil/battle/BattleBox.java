@@ -450,7 +450,7 @@ public interface BattleBox {
                         g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 0, 255, 0, 100);
 
                     if (bf.sb.summonerSummoned[i][j]) {
-                        if (bf.sb.spiritSummoned[i][j] || bf.sb.findEntitiesOf(i, j).stream().anyMatch(e -> e.anim.dead >= 0)) {
+                        if (bf.sb.spiritSummoned[i][j] || bf.sb.findEntitiesOf(i, j).stream().noneMatch(e -> e.anim.dead < 0)) {
                             g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 64, 0, 0, 160);
                         } else {
                             if (bf.sb.spiritEmphasizeCount[i][j] % 2 == 0) {
@@ -551,7 +551,7 @@ public interface BattleBox {
                     g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 0, 255, 0, 100);
 
                 if (bf.sb.summonerSummoned[index][i % 5]) {
-                    if (bf.sb.spiritSummoned[index][i % 5] || bf.sb.findEntitiesOf(index, i % 5).stream().anyMatch(e -> e.anim.dead >= 0)) {
+                    if (bf.sb.spiritSummoned[index][i % 5] || bf.sb.findEntitiesOf(index, i % 5).stream().noneMatch(e -> e.anim.dead < 0)) {
                         g.colRect((int) (x - (imw - iw) / 2.0), (int) (y - (imh - ih) / 2.0), imw, imh, 64, 0, 0, 160);
                     } else {
                         if (bf.sb.spiritEmphasizeCount[index][i % 5] % 2 == 0) {

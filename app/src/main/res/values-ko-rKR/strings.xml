@@ -1092,4 +1092,17 @@
         <item>첫 격파 시 획득하는 머니가 조금 증가하는 능력이 2번 생산될 때마다 부여됩니다 (+{0}, 중복 불가)</item>
         <item>적 캐릭터에게 받은 폭파 공격 데미지를 경감시킵니다 (-{0})</item>
     </string-array>
+    <!-- BCU KR: core 0.7.20.0 additions -->
+    <string name="stage_SR">SR 스테이지</string>
+    <string name="stage_G">G 스테이지</string>
+    <string name="sch_villain">초극악</string>
+    <string name="abi_vkill">초극악 특효</string>
+    <string name="talen_blast">폭파 공격</string>
+    <string name="talen_counter_surge">열파 카운터</string>
+    <string name="talen_imublast">폭파 무효</string>
+    <string name="combo_vkill">초극악 특효 효과</string>
+    <string name="combo_imuwave">파동 무효 효과</string>
+    <string name="combo_discount">생산 비용 할인 효과</string>
+    <string name="combo_imuvolc">열파 무효 효과</string>
+    <string name="orb_not_applied">(BCU 전투에서는 아직 적용되지 않음)</string>
 </resources>

@@ -1091,4 +1091,17 @@
         <item>Every 2nd one deployed: money from its first kill +{0}</item>
         <item>Damage from explosions -{0}</item>
     </string-array>
+    <!-- BCU KR: core 0.7.20.0 additions -->
+    <string name="stage_SR">SR Stages</string>
+    <string name="stage_G">G Stages</string>
+    <string name="sch_villain">Supervillain</string>
+    <string name="abi_vkill">Supervillain Slayer</string>
+    <string name="talen_blast">Blast</string>
+    <string name="talen_counter_surge">Counter-Surge</string>
+    <string name="talen_imublast">Imu.Blast</string>
+    <string name="combo_vkill">Supervillain Slayer</string>
+    <string name="combo_imuwave">Wave Immune</string>
+    <string name="combo_discount">Deploy Cost Down</string>
+    <string name="combo_imuvolc">Surge Immune</string>
+    <string name="orb_not_applied">(BCU doesn\'t apply it in battle yet)</string>
 </resources>

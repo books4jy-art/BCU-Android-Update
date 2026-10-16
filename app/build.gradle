@@ -26,8 +26,8 @@ android {
         applicationId "com.mandarin.bcu.kr"
         minSdkVersion 24
         targetSdkVersion 34
-        versionCode 3
-        versionName "0.18.13-kr3" // BCU Android 0.18.13 + this copy's changes (core 0.7.20.0, country data)
+        versionCode 4
+        versionName "0.18.13-kr4" // BCU Android 0.18.13 + this copy's changes (core 0.7.20.0, country data)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         android.buildFeatures.buildConfig = true
@@ -40,7 +40,7 @@ android {
             buildConfigField "Boolean", "DEBUG_MODE", "true"
         }
         release {
-            debuggable true
+            debuggable false
             getIsDefault().set(true)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

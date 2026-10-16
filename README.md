@@ -41,6 +41,16 @@ What's different from the official app:
   for unreleased or removed cats, no table missing rows for cats or enemies BCU has, no talent types the core
   doesn't know, no combos with cats BCU doesn't have. Cat stats, max levels, combos, orbs and castle parts are
   otherwise the same in all versions.
+- **Fixes for the newer core** (the official app's screens were written for the 2024 core): no crash in the effect
+  viewers, on talent names (Blast, Counter-Surge, Imu. Blast) or on enemies with the Base trait; the Supervillain
+  trait, Supervillain Slayer, the new abilities (Blast, Lethargy, Delay, HP regeneration, speed-up and their
+  immunities) and combos (Supervillain Slayer, Wave/Surge Immune, Deploy Cost Down) are shown; the SR and G stage
+  collections are listed; the ability texts are the core's current ones.
+- **Battles as in BCU PC**: orbs a cat can't have yet (form/level) or the stage bans are left out of the battle (before,
+  only with "realistic levels" on), stage level limits use the stage's unit-group limits and also cap talents, Rich
+  Cat and Sniper the Cat are off on stages that ban them, and a battle no longer changes the saved lineup's orbs or
+  talents. Also: a cat's talents are no longer cleared when its settings are opened in a form without talents,
+  respawn times count only combos that include that cat, and spirit slots show correctly when a summoner died.
 - **Installs next to the official app**: app ID `com.mandarin.bcu.kr`, name "BCU KR", its own file-provider name,
   and it never offers the official APKs as updates.
 - **Builds without the BCU team's private files**: no Firebase (crash notes go to Android's log, tag "BCU"), no

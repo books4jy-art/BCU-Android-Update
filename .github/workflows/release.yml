@@ -69,6 +69,7 @@ jobs:
           ver=$(sed -n 's/^ *versionName "\([^"]*\)".*/\1/p' app/build.gradle)
           tag="${TAG_INPUT:-${GITHUB_REF_NAME}}"
           case "$tag" in v*) ;; *) tag="v$ver" ;; esac
+          [ "$tag" = "v$ver" ] || { echo "::error::Tag $tag doesn't match the app's version $ver (versionName in app/build.gradle)"; exit 1; }
           apk="BCU-KR-$ver.apk"
           cp app/build/outputs/apk/release/app-release.apk "$apk"
           notes="BCU KR $ver: Battle Cats Ultimate for Android with BCU core 0.7.20.0 and the game's country versions (Settings > Game version: Korea, Japan, English or Taiwan 15.6, or BCU's own data).

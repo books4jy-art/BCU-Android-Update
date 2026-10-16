@@ -62,7 +62,9 @@ import common.io.json.JsonEncoder
 import common.pack.Identifier
 import common.system.P
 import common.util.lang.MultiLangCont
+import common.util.stage.LvRestrict
 import common.util.stage.Stage
+import common.util.unit.Form
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -194,14 +196,22 @@ class BattleSimulation : AppCompatActivity() {
 
                 val lu = BasisSet.current().sele.copy()
 
+                // BCU KR: the copy shares each cat's talent and orb arrays with the saved lineup, and the changes below
+                // (level limits, orbs the cat can't have yet or the stage bans) must only apply to this battle
+                for(lv in lu.lu.map.values) {
+                    lv.setTalents(lv.talents.clone())
+                    lv.setOrbs(lv.orbs?.map { it.clone() }?.toTypedArray())
+                }
+
                 val restricted = restrictLevel(stg, lu)
 
                 if(restricted) {
                     StaticStore.showShortMessage(this@BattleSimulation, R.string.battle_restricted)
                 }
 
-                if(CommonStatic.getConfig().realLevel)
-                    lu.performRealisticLeveling(stg.lim?.stageLimit)
+                // as BCU PC: always, since it also removes orbs the cat can't have yet or the stage bans (the core
+                // only checks the realistic-level setting for the forms and talents part) and applies the limits above
+                lu.performRealisticLeveling(stg.lim?.stageLimit)
 
                 val ctrl = SBCtrl(AndroidKeys(), stg, star, lu, intArrayOf(item), r.nextLong())
 
@@ -946,75 +956,71 @@ class BattleSimulation : AppCompatActivity() {
     }
 
     private fun restrictLevel(st: Stage, lu: BasisLU) : Boolean {
+        val lvr = st.lim?.lvr ?: return false
+
         var changed = false
 
-        if(st.lim != null && st.lim.lvr != null) {
-            for(forms in lu.lu.fs) {
-                for(form in forms) {
-                    form ?: continue
+        for(forms in lu.lu.fs) {
+            for(form in forms) {
+                form ?: continue
 
-                    val level = lu.lu.map[form.unit.id] ?: continue
+                val level = lu.lu.map[form.unit.id] ?: continue
+                val max = levelLimit(lvr, form)
 
-                    var temp = level.lv
+                if(level.lv > max[0]) {
+                    level.setLevel(max[0])
+                    changed = true
+                }
 
-                    level.setLevel(min(level.lv, st.lim.lvr.all[0]))
+                if(level.plusLv > max[1]) {
+                    level.setPlusLevel(max[1])
+                    changed = true
+                }
 
-                    if(!changed && temp != level.lv)
+                for(i in 2 until max.size) {
+                    if (i - 2 >= level.talents.size)
+                        break
+
+                    if(level.talents[i - 2] > max[i]) {
+                        level.talents[i - 2] = max[i]
                         changed = true
-
-                    temp = level.plusLv
-
-                    level.setPlusLevel(min(level.plusLv, st.lim.lvr.all[1]))
-
-                    if(!changed && temp != level.plusLv)
-                        changed = true
-
-                    for(i in 2 until st.lim.lvr.all.size) {
-                        if (i - 2 >= level.talents.size)
-                            break
-
-                        temp = level.talents[i - 2]
-
-                        level.talents[i - 2] = min(level.talents[i - 2], st.lim.lvr.all[i])
-
-                        if(!changed && temp != level.talents[i - 2])
-                            changed = true
-                    }
-
-                    st.lim.lvr.rares.forEachIndexed { index, levels ->
-                        if (form.unit.rarity == index) {
-                            temp = level.lv
-
-                            level.setLevel(min(level.lv, levels[0]))
-
-                            if(!changed && temp != level.lv)
-                                changed = true
-
-                            temp = level.plusLv
-
-                            level.setPlusLevel(min(level.plusLv, levels[1]))
-
-                            if(!changed && temp != level.plusLv)
-                                changed = true
-
-                            for(i in 2 until levels.size) {
-                                if (i - 2 >= level.talents.size)
-                                    break
-
-                                temp = level.talents[i - 2]
-
-                                level.talents[i - 2] = min(level.talents[i - 2], levels[i])
-
-                                if(!changed && temp != level.talents[i - 2])
-                                    changed = true
-                            }
-                        }
                     }
                 }
             }
         }
 
         return changed
+    }
+
+    /**
+     * BCU KR: the stage's limits for this cat as in the core's LvRestrict.valid (which BCU PC uses): a cat in one of
+     * the restriction's unit groups gets the group's limits only, other cats the limits of their rarity and of all
+     * cats.
+     */
+    private fun levelLimit(lvr: LvRestrict, form: Form) : IntArray {
+        val max = IntArray(LvRestrict.MAX.size) { Int.MAX_VALUE }
+        var grouped = false
+
+        for((group, restrict) in lvr.groups) {
+            if(group.set.contains(form.unit)) {
+                for(i in 0 until min(max.size, restrict.lv.size))
+                    max[i] = min(max[i], restrict.lv[i])
+
+                grouped = true
+            }
+        }
+
+        if(!grouped) {
+            for(i in max.indices) {
+                if(form.unit.rarity in lvr.rares.indices && i < lvr.rares[form.unit.rarity].size)
+                    max[i] = min(max[i], lvr.rares[form.unit.rarity][i])
+
+                if(i < lvr.all.size)
+                    max[i] = min(max[i], lvr.all[i])
+            }
+        }
+
+        return max
     }
 
     inner class ScaleListener(private val cView: BattleView) : ScaleGestureDetector.SimpleOnScaleGestureListener() {

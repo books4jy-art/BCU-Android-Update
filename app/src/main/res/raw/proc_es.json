@@ -175,6 +175,70 @@
             }
         }
     },
+    "SPEEDUP": {
+        "abbr_name": "inc. spd",
+        "full_name": "Adrenaline",
+        "tooltip": null,
+        "format": "Speed [(mult>0){increased}(mult<0){decreased}] by [(mult>0){(mult)}(mult<0){(mult*-1)}]% after health drops below (health)%",
+        "class": {
+            "health": {
+                "name": "health",
+                "tooltip": null
+            },
+            "mult": {
+                "name": "increment",
+                "tooltip": "Set negative to slow"
+            }
+        }
+    },
+    "HPREGEN": {
+        "abbr_name": "hp regen",
+        "full_name": "Regeneration",
+        "tooltip": "heal or harm the entity every so often. Note that this doesn't trigger hitbacks",
+        "format": "[(amount>0){Heals by (amount) HP}(amount<0){Hurts by (amount*-1) HP}(amount==0){No healing}] at a (prob)% chance every (interval)f[(scaleWithBuff){, affected by buff}][(onlyOnce){, only occurring once}][(resetWhenDamaged){, resetting when damaged}][(freezeEff){, affected by freeze}][(removeProcs){, clearing all procs}][(idleTrigger){, only while standing still}][(noHB){, ignoring hitbacks}]",
+        "class": {
+            "prob": {
+                "name": "chance",
+                "tooltip": null
+            },
+            "interval": {
+                "name": "interval",
+                "tooltip": null
+            },
+            "amount": {
+                "name": "amount",
+                "tooltip": "Can be negative"
+            },
+            "scaleWithBuff": {
+                "name": "scale with buff",
+                "tooltip": "Increases amount as buff/level increases"
+            },
+            "onlyOnce": {
+                "name": "only once",
+                "tooltip": "Regeneration only happens once then never again"
+            },
+            "resetWhenDamaged": {
+                "name": "reset on damage",
+                "tooltip": "Regeneration timer resets when the entity is damaged"
+            },
+            "freezeEff": {
+                "name": "affected by freeze",
+                "tooltip": "Freeze will stop the regeneration timer"
+            },
+            "removeProcs": {
+                "name": "remove procs",
+                "tooltip": "When hp regeneration fires, all procs are removed (even if amount is 0)"
+            },
+            "idleTrigger": {
+                "name": "static only",
+                "tooltip": "HP regeneration will only begin when the entity isn't moving (either idle or attacking)"
+            },
+            "noHB": {
+                "name": "ignore hitback",
+                "tooltip": "Does not play hitback animations (useful if you want a timed entity like Iron Wall Cat or an instant soul spawner)"
+            }
+        }
+    },
     "LETHAL": {
         "abbr_name": "sobrevivir",
         "full_name": "Supervivencia",
@@ -500,7 +564,10 @@
             "Las entidades invocadas estarán en [(min_layer==max_layer){la misma capa que esta entidad}",
             "(min_layer!=max_layer){una capa aleatoria}]. ",
             "La invocación mostrará [(type.anim_type==0){cero animaciones}(type.anim_type==1){la animación de abducción}(type.anim_type>=2){la animación de escarbar}]",
-            "[(type.anim_type==3){ y desactivará escarbar para las entidades invocadas}]."
+            "[(type.anim_type==3){ y desactivará escarbar para las entidades invocadas}]. ",
+            "[(tba!=0){Summon will start with [(tba==-1){its attack cooldown.}(tba>0){(tba) frames of attack cooldown.}]}]",
+            "[(type.fix_buff){ (_left)fixed buff(_right)}]",
+            " (_left)layer type (type.layer_type)(_right)"
         ],
         "class": {
             "prob": {
@@ -529,11 +596,11 @@
             },
             "min_layer": {
                 "name": "min layer",
-                "tooltip": "lowest layer the summoned entity will be at. Set to -1 to use same layer as this entity"
+                "tooltip": "lowest layer the summoned entity will be at."
             },
             "max_layer": {
                 "name": "max layer",
-                "tooltip": "highest layer the summoned entity will be at. Set to -1 to use same layer as this entity"
+                "tooltip": "highest layer the summoned entity will be at."
             },
             "type.anim_type": {
                 "name": "anim. invocar",
@@ -578,9 +645,24 @@
                     " Las invocaciones múltiples son posibles para ataques de área."
                 ]
             },
+            "type.layer_type": {
+                "name": "layer type",
+                "tooltip": [
+                    "0 (original): Use exact layer of summoner for summon.<br>",
+                    "1 (set): Set layer of summon.<br>",
+                    "2 (relative): Add/subtract to summoner's layer for summon."
+                ]
+            },
             "form": {
                 "name": "Forma",
                 "tooltip": "Establece qué forma de la unidad deseas invocar. Sólo aplicable a Unidades."
+            },
+            "tba": {
+                "name": "starting tba",
+                "tooltip": [
+                    "Summoned enemy enters the fight with added attack cooldown.",
+                    " Set -1 to use TBA of summoned entity."
+                ]
             }
         }
     },
@@ -653,7 +735,7 @@
             "id": {
                 "name": "ID fondo",
                 "tooltip": null
-            },
+			},
             "mus": {
                 "name": "ID Música",
                 "tooltip": null
@@ -787,7 +869,10 @@
         "abbr_name": "evasión",
         "full_name": "Evasión",
         "tooltip": null,
-        "format": "Probabilidad del (prob)% de esquivar ataques por (_dispTime(time))",
+        "format": [
+            "Probabilidad del (prob)% de esquivar ataques por (_dispTime(time))",
+            "[(cd>0){, with (_dispTime(cd)) cooldown after invincibility expires}]"
+        ],
         "class": {
             "prob": {
                 "name": "probabilidad",
@@ -795,6 +880,10 @@
             },
             "time": {
                 "name": "duración",
+                "tooltip": null
+            },
+            "cd": {
+                "name": "cooldown",
                 "tooltip": null
             }
         }
@@ -1059,7 +1148,7 @@
         "format" : ["Barrera (_left)La barrera tiene [(type.magnif){(_shield(health))}(!type.magnif){(health)}] HP",
             "[(regentime>0){, se regenera (_dispTime(regentime)) después de ser quebrada}]",
             "[(timeout>0){, la barrera se rompe después de (_dispTime(timeout))}](_right)"
-        ],
+            ],
         "class" : {
             "health" : {
                 "name" : "Salud",
@@ -1112,10 +1201,10 @@
         "full_name": "Contraataque",
         "tooltip": "Inflige daño tras ser atacado.",
         "format": ["Probabilidad del (prob)% de contraatacar, infligiendo un (damage)% [(!type.useOwnDamage){del daño recibido de un ataque. }(type.useOwnDamage){del ataque de esta entidad. }]",
-            "[(type.counterWave!=0){ Esta entidad también [(type.counterWave==1){contraatacará}(type.counterWave==2){reflejará}] oleadas/réplicas. }][(type.procType!=0){Este contraataque ",
-            "[(type.procType==1|type.procType==3){tendrá}(type.procType==2){reemplazará}] las habilidades del ataque original[(type.procType==2){ con las habilidades de esta entidad}(type.procType==3){ y las habilidades de esta entidad}]. }]",
-            "El contraataque golpeará a [(type.areaAttack){ todos los enemigos}(!type.areaAttack){ solo el atacante}][(type.areaAttack|!type.outRange){[(!type.areaAttack){ si se encuentran}]",
-            "[(minRange!=0|maxRange!=0){ de (minRange) a (maxRange) unidades de esta entidad}(minRange==0&maxRange==0){ en el alcance de esta entidad}]}]."],
+                    "[(type.counterWave!=0){ Esta entidad también [(type.counterWave==1){contraatacará}(type.counterWave==2){reflejará}] oleadas/réplicas. }][(type.procType!=0){Este contraataque ",
+                    "[(type.procType==1|type.procType==3){tendrá}(type.procType==2){reemplazará}] las habilidades del ataque original[(type.procType==2){ con las habilidades de esta entidad}(type.procType==3){ y las habilidades de esta entidad}]. }]",
+                    "El contraataque golpeará a [(type.areaAttack){ todos los enemigos}(!type.areaAttack){ solo el atacante}][(type.areaAttack|!type.outRange){[(!type.areaAttack){ si se encuentran}]",
+                    "[(minRange!=0|maxRange!=0){ de (minRange) a (maxRange) unidades de esta entidad}(minRange==0&maxRange==0){ en el alcance de esta entidad}]}]."],
         "class": {
             "prob": {
                 "name": "probabilidad",
@@ -1231,9 +1320,12 @@
         "abbr_name": "Mata BST",
         "full_name": "Cazador de Bestias",
         "tooltip": null,
-        "format": "Cazador de Bestias (_left)Inflige 2.5x de daño[(prob>0){, }(prob==0){ y }]sólo recibe 0.6x de daño[(prob>0){, y una probabilidad del (prob)% de evadir sus ataques por (_dispTime(time))}](_right)",
+        "format": [
+            "Cazador de Bestias (_left)Inflige 2.5x de daño[(prob>0){, }(prob==0){ y }]sólo recibe 0.6x de daño[(prob>0){, y una probabilidad del (prob)% de evadir sus ataques por (_dispTime(time))}](_right)",
+            "[(cd>0){, with (_dispTime(cd)) cooldown after invincibility expires}]"
+        ],
         "class": {
-            "type.active": {
+            "active": {
                 "name": "Mayor fuerza contra Bestias",
                 "tooltip": null
             },
@@ -1243,6 +1335,10 @@
             },
             "time": {
                 "name": "duración",
+                "tooltip": null
+            },
+            "cd": {
+                "name": "cooldown",
                 "tooltip": null
             }
         }
@@ -1298,5 +1394,195 @@
                 "tooltip": null
             }
         }
-    }
+    },
+    "BLAST" : {
+        "abbr_name": "blast atk",
+        "full_name": "Blast Attack",
+        "tooltip": "Creates blast attack that spreads to each side with weaker damage over each blasts",
+        "format": "(prob)% chance to create a blast attack (_left)Created [(dis_0==dis_1){at (dis_0) range}(dis_0!=dis_1){within (dis_0) ~ (dis_1) range}](_right)",
+        "class": {
+            "prob": {
+                "name": "chance",
+                "tooltip": null
+            },
+            "dis_0": {
+                "name": "point near",
+                "tooltip": null
+            },
+            "dis_1": {
+                "name": "point far",
+                "tooltip": null
+            }
+        }
+    },
+    "IMUBLAST" : {
+        "abbr_name": "imu. Blast",
+        "full_name": "Immune/Resistant to Blast",
+        "tooltip": null,
+        "format": ["[(mult!=0&block!=100){[(mult==100){Immune}(mult<100&mult>0){Resistant}(mult<0){Weak}] to Blast",
+            "[(mult<100&mult>0){ (_left)Decreases damage by (mult)%(_right)}(mult<0){ (_left)Increases damage by (_abs(mult))%(_right)}]",
+            "[(block!=0&block<100){ & }]}][(block!=0){Blast [(block==100){blocker}(block<100&block>0){absorber}(block<0){increaser}]",
+            "[(block<100&block>0){ (_left)Decreases damage by (block)%(_right)}(block<0){ (_left)Increases damage by (_abs(block))%(_right)}]}]"],
+        "class": {
+            "mult": {
+                "name": "percent",
+                "tooltip": "Set negative to make this unit weak to the effect"
+            },
+            "block": {
+                "name": "Blocker",
+                "tooltip": "Set from 1 to 99 to reduce duration amongst all units. Set to 100 to completely block slow. Set negative to increase the effect."
+            }
+        }
+    },
+    "LETHARGY": {
+        "abbr_name": "lethargy",
+        "full_name": "Lethargy",
+        "tooltip": null,
+        "format": [
+            "[(type==2){Lockstep Hex}(type!=2){[(mult>=0){Lethargy}(mult<0){Energize}]}]",
+            " (_left)",
+            "(prob)% chance to ",
+            "[(type==2){set}(type!=2){[(mult>=0){increase}(mult<0){decrease}]}]",
+            " target's TBA ",
+            "[(type!=2){by}(type==2){to}] [(type==2){(mult)}(type!=2){(_abs(mult))}][(type==1){%}]",
+            " for (_dispTime(time))",
+            "(_right)"
+        ],
+        "class": {
+            "prob": {
+                "name": "chance",
+                "tooltip": null
+            },
+            "time": {
+                "name": "duration",
+                "tooltip": null
+            },
+            "mult": {
+                "name": "TBA",
+                "tooltip": "In mode 0 or 1, set negative to reduce and set positive to increase"
+            },
+            "type": {
+                "name": "type",
+                "tooltip": "0 for adding TBA by a value, 1 for increasing the TBA by a percentage, 2 for setting TBA to a value"
+            }
+        }
+    },
+    "IMULETH": {
+        "abbr_name": "Imu.Lethargy",
+        "full_name": "Immune/Resistant to Lethargy",
+        "tooltip": null,
+        "format": [
+            "[(mult!=0&block!=100){[(mult==100){Immune}(mult<100&mult>0){Resistant}(mult<0){Weak}] to Lethargy",
+            "[(mult<100&mult>0){ (_left)Decreases duration by (mult)%(_right)}(mult<0){ (_left)Increases duration by (_abs(mult))%(_right)}]",
+            "[(block!=0&block<100){ & }]}][(block!=0){Lethargy [(block==100){blocker}(block<100&block>0){absorber}(block<0){increaser}]",
+            "[(block<100&block>0){ (_left)Decreases duration by (block)%(_right)}(block<0){ (_left)Increases duration by (_abs(block))%(_right)}]}]",
+            "[(smartImu!=0){. Only affects speed [(smartImu>0){debuffs}(smartImu<0){buffs}]}]"
+        ],
+        "class": {
+            "mult": {
+                "name": "percent",
+                "tooltip": "Set negative to make this unit weak to the effect"
+            },
+            "block": {
+                "name": "Blocker",
+                "tooltip": "Set from 1 to 99 to reduce Lethargy time. Set to 100 to completely block Lethargy. Set negative to increase the effect."
+            },
+            "smartImu": {
+                "name": "Ignore",
+                "tooltip": "0 = Resist buffs and debuffs, 1 = Only resistant to speed debuffs, -1 = Only resistant to speed buffs"
+            }
+        }
+    },
+    "DELAY": {
+        "abbr_name": "delay",
+        "full_name": "Delay/Advance",
+        "tooltip": null,
+        "format": [
+            "(prob)% chance to [(strength>=0){delay}(strength<0){advance}] target's respawn by [(type==0|type==2){(_abs(strength))%}(type==1){(_dispTimeAbs(strength))}]",
+            "[(type==2){ of maximum respawn}(type==0){ of current respawn}]"
+        ],
+        "class": {
+            "prob": {
+                "name": "chance",
+                "tooltip": null
+            },
+            "strength": {
+                "name": "strength",
+                "tooltip": "How much the cooldown gets delayed. Set negative to speed up instead."
+            },
+            "type": {
+                "name": "type",
+                "tooltip": "0 = Apply x% current cooldown. 1 = Apply a direct amount. 2 = Apply x% max cooldown."
+            }
+        }
+    },
+    "IMUDELAY" : {
+        "abbr_name": "imu. Delay",
+        "full_name": "Immune/Resistant to Delay",
+        "tooltip": null,
+        "format": [
+            "[(mult!=0&block!=100){[(mult==100){Immune}(mult<100&mult>0){Resistant}(mult<0){Weak}] to [(smartImu==0){Delay/Advance}(smartImu>0){Delay}(smartImu<0){Advance}]",
+            "[(mult<100&mult>0){ (_left)Decreases strength by (mult)%(_right)}(mult<0){ (_left)Increases strength by (_abs(mult))%(_right)}]",
+            "[(block!=0&block<100){ & }]}][(block!=0){[(smartImu==0){Delay/Advance}(smartImu>0){Delay}(smartImu<0){Advance}] [(block==100){blocker}(block<100&block>0){absorber}(block<0){increaser}]",
+            "[(block<100&block>0){ (_left)Decreases strength by (block)%(_right)}(block<0){ (_left)Increases strength by (_abs(block))%(_right)}]}]"
+        ],
+        "class": {
+            "mult": {
+                "name": "percent",
+                "tooltip": "Set negative to make this unit weak to the effect"
+            },
+            "block": {
+                "name": "Blocker",
+                "tooltip": "Set from 1 to 99 to reduce duration amongst all units. Set to 100 to completely block delay. Set negative to increase the effect."
+            },
+            "smartImu": {
+                "name": "Ignore",
+                "tooltip": "0 = Resist both Delay and Advance. 1 = Only resistant to Delay. -1 = Only resistant to Advance"
+            }
+        }
+    },
+	"MINIDEATHSURGE": {
+		"abbr_name": "D.M.Surge",
+		"full_name": "Death Mini-Surge",
+		"tooltip": null,
+		"format": "(prob)% chance to make a Lv. [(maxtime>time){(time/20) ~ (maxtime/20)}(maxtime<=time){(time/20)}] mini surge attack when killed (_left)Lasts (_dispTime(time)) ~ (_dispTime(maxtime)), created within (dis_0) ~ (dis_1) range, with (mult)% damage of attacker(_right)",
+		"class": {
+			"prob": {
+				"name": "chance",
+				"tooltip": null
+			},
+			"dis_0": {
+				"name": "point near",
+				"tooltip": null
+			},
+			"dis_1": {
+				"name": "point far",
+				"tooltip": null
+			},
+			"time": {
+				"name": "duration",
+				"tooltip": null
+			},
+			"maxtime": {
+				"name": "max duration",
+				"tooltip": ""
+			},
+			"mult": {
+				"name": "multiplier",
+				"tooltip": null
+			}
+		}
+	},
+	"MONEYBACK": {
+		"abbr_name": "Money-Back",
+		"full_name": "Money-Back",
+		"tooltip": null,
+		"format": "[(mult>0){Money-Back}(mult<0){Insurance Tax}] (_left)(_abs(mult))% [(mult>0){more}(mult<0){less}] money received upon death(_right)",
+		"class": {
+			"mult": {
+				"name": "percent",
+				"tooltip": "Amount of money refunded"
+			}
+		}
+	}
 }

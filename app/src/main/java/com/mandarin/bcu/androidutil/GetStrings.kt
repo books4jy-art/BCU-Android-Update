@@ -93,11 +93,14 @@ class GetStrings(private val c: Context) {
             R.string.sch_abi_bk, //63: Colossus Slayer
             R.string.sch_abi_bh, //64: Behemoth Hunter
             R.string.sch_abi_ms, //65: Mini Surge
-            R.string.sch_abi_sh //66: Super Sage Slayer
+            R.string.sch_abi_sh, //66: Super Sage Slayer
+            R.string.talen_blast, //67: Blast
+            R.string.talen_counter_surge, //68: Counter Surge
+            R.string.talen_imublast //69: Imu. Blast
         )
         private lateinit var talTool: Array<String>
-        private val mapcolcid = arrayOf("N", "S", "C", "CH", "E", "T", "V", "R", "M", "A", "B", "RA", "H", "CA", "Q")
-        val mapcodes = listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031")
+        private val mapcolcid = arrayOf("N", "S", "C", "CH", "E", "T", "V", "R", "M", "A", "B", "RA", "H", "CA", "Q", "L", "ND", "SR", "G")
+        val mapcodes = listOf("000000", "000001", "000002", "000003", "000004", "000006", "000007", "000011", "000012", "000013", "000014", "000024", "000025", "000027", "000031", "000033", "000034", "000036", "000037")
         private val allColor: String
         private val allTrait: String
 
@@ -507,8 +510,8 @@ class GetStrings(private val c: Context) {
         else
             f.du
 
-        // (the core now takes the lineup's research combo as a number)
-        val res = t.getFinRes(du.respawn, BasisSet.current().sele.getInc(Data.C_RESP.toInt()))
+        // (the core now takes the research combo as a number: only combos that include this cat, as in battle)
+        val res = t.getFinRes(du.respawn, BasisSet.current().sele.getInc(Data.C_RESP.toInt(), f.unit))
 
         return if (frse == 0)
             res.toString() + "f"
